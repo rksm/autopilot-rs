@@ -12,7 +12,6 @@
 //! system, where the origin is at the top left.
 
 use geometry::Point;
-use screen;
 use std;
 use std::fmt;
 
@@ -68,9 +67,9 @@ impl std::error::Error for MouseError {}
 ///
 /// Returns `MouseError` if coordinate is outside the screen boundaries.
 pub fn smooth_move(destination: Point, duration: Option<f64>) -> Result<(), MouseError> {
-    if !screen::is_point_visible(destination) {
-        return Err(MouseError::OutOfBounds);
-    }
+    // if !screen::is_point_visible(destination) {
+    //     return Err(MouseError::OutOfBounds);
+    // }
 
     let start_position = location();
     let distance = (start_position.x - destination.x).hypot(start_position.y - destination.y);
@@ -109,12 +108,12 @@ pub fn click(button: Button, delay_ms: Option<u64>) {
 ///
 /// Returns `MouseError` if coordinate is outside the screen boundaries.
 pub fn move_to(point: Point) -> Result<(), MouseError> {
-    if !screen::is_point_visible(point) {
-        Err(MouseError::OutOfBounds)
-    } else {
-        system_move_to(point);
-        Ok(())
-    }
+    // if !screen::is_point_visible(point) {
+    //     Err(MouseError::OutOfBounds)
+    // } else {
+    system_move_to(point);
+    Ok(())
+    // }
 }
 
 /// Returns the current position of the mouse cursor.

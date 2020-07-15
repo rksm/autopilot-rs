@@ -438,11 +438,11 @@ pub fn capture_screen() -> ImageResult<Bitmap> {
 
 /// Returns a screengrab of the given portion of the main display.
 pub fn capture_screen_portion(rect: Rect) -> ImageResult<Bitmap> {
-    if !screen::is_rect_visible(rect) {
-        Err(ImageError::DimensionError)
-    } else {
-        system_capture_screen_portion(rect)
-    }
+    // if !screen::is_rect_visible(rect) {
+    //     Err(ImageError::DimensionError)
+    // } else {
+    system_capture_screen_portion(rect)
+    // }
 }
 
 #[cfg(target_os = "macos")]
