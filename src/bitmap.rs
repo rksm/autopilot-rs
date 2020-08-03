@@ -92,7 +92,9 @@ impl Bitmap {
     /// Returns new Bitmap created from a portion of another.
     pub fn cropped(&mut self, rect: Rect) -> ImageResult<Bitmap> {
         if !self.bounds().is_rect_visible(rect) {
-            Err(ImageError::DimensionError)
+            Err(ImageError::Limits(image::error::LimitError::from_kind(
+                image::error::LimitErrorKind::DimensionError,
+            )))
         } else {
             let rect = rect.scaled(self.scale).round();
             let cropped_image = self.image.crop(
@@ -380,7 +382,7 @@ impl Bitmap {
         use image::ImageFormat;
 
         let mut buffer: Vec<u8> = Vec::new();
-        self.image.write_to(&mut buffer, ImageFormat::PNG)?;
+        self.image.write_to(&mut buffer, ImageFormat::Png)?;
         unsafe {
             let data = NSData::dataWithBytes_length_(
                 nil,
@@ -451,7 +453,10 @@ fn system_capture_screen_portion(rect: Rect) -> ImageResult<Bitmap> {
     if let Some(image) = CGDisplay::screenshot(CGRect::from(rect), 0, 0, 0) {
         macos_load_cgimage(&image)
     } else {
-        Err(ImageError::NotEnoughData)
+        Err(ImageError::IoError(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            "Invalid",
+        )))
     }
 }
 
